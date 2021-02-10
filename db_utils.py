@@ -25,7 +25,7 @@ def insert_reading(db_con,chan,enc,essid,sig_lvl_dbm,sig_qual,sig_total,mode,mac
     VALUES(?,?,?,?,?,?,?,?) 
     """
     db_cur.execute(sql_cmd,(chan,enc,essid,sig_lvl_dbm,sig_qual,sig_total,mode,mac))
-    db_con.commit()
+    #db_con.commit()
 
 def table_exists(con,table_name):
     cur = con.cursor()

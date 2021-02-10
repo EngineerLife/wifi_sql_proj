@@ -1,6 +1,7 @@
 import db_utils
 from time import sleep
 import iwlist
+import datetime
 
 def parse_reading(reading):
     chan = reading.get('channel')
@@ -13,9 +14,13 @@ def parse_reading(reading):
     mac = reading['mac']
     return (chan,enc,essid,sig_lvl_dbm,sig_qual,sig_total,mode,mac)
 
+seconds_to_collect = 60
+
 if __name__ == '__main__':
     db_con = db_utils.db_setup()
-    for i in range(0,20):
+    last_commit = datetime.datetime.now()
+    for i in range(0,int(seconds_to_collect/5)):
+        time_start = datetime.datetime.now()
         content = iwlist.scan(interface='wlp4s0')
         cells = iwlist.parse(content)
         # add to db
@@ -26,7 +31,10 @@ if __name__ == '__main__':
             #{'cellnumber': '01', 'mac': 'F0:72:EA:32:9B:E5', 'signal_quality': '68', 'signal_total': '70', 'signal_level_dBm': '-42', 'encryption': 'wpa2', 'essid': 'Echo', 'mode': 'Master'}
             #chan = 
             #print(reading)
-        #exit(0)
-        #insert_reading(db_con,cells[''],"WPA2","Echo",-71,70,70,"Master","MACSSS")
-        sleep(0.2)
+        time_end = datetime.datetime.now()
+        time_diff = (time_end - time_start)
+        exec_time = time_diff.total_seconds()
+        print(exec_time)
+        sleep(5-exec_time)
+    db_con.commit()
         
