@@ -42,13 +42,21 @@ def find_oui_lookup_foreign_keys(db_con,vendor_bytes):
     res = cur.fetchall()
     return res
 
+def vendor_str_entry_exists(db_con,mac,entry_id):
+    cur = db_con.cursor()
+    cur.execute("""SELECT mac_full FROM mac_vendor_str WHERE mac_full=? AND oui_lookup_entry_id=?""",(mac,entry_id))
+    res = cur.fetchall()
+    return len(res) > 0
+
+
 def add_vendor_str_table_entry(db_con,unique_mac,matching_entry_id):
-    db_cur = db_con.cursor()
-    sql_cmd = """INSERT into mac_vendor_str(mac_full,oui_lookup_entry_id)
-    VALUES(?,?) 
-    """
-    #print((unique_mac,vendor_bytes,matching_entry_id))
-    db_cur.execute(sql_cmd,(unique_mac,matching_entry_id))
+    if not vendor_str_entry_exists(db_con,unique_mac,matching_entry_id):
+        db_cur = db_con.cursor()
+        sql_cmd = """INSERT into mac_vendor_str(mac_full,oui_lookup_entry_id)
+        VALUES(?,?) 
+        """
+        #print((unique_mac,vendor_bytes,matching_entry_id))
+        db_cur.execute(sql_cmd,(unique_mac,matching_entry_id))
 
 def insert_reading(db_con,chan,enc,essid,sig_lvl_dbm,sig_qual,sig_total,mode,mac):
     db_cur = db_con.cursor()
