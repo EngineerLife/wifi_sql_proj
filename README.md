@@ -1,4 +1,4 @@
-# wifi_sql_proj
+# wifi_sql_proj [![CodeFactor](https://www.codefactor.io/repository/github/engineerlife/wifi_sql_proj/badge)](https://www.codefactor.io/repository/github/engineerlife/wifi_sql_proj)
 A simple project to capture iwscan results to a sqlite3 database.
 
 # Dependencies
